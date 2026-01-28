@@ -33,7 +33,12 @@ public class AgendaTarefas {
         arvore.exibirArvore();
     }
 
+    /**
+     * Retorna o total de tarefas do utilizador.
+     * Aplica a Regra 4.1: Subtrai 1 do total de nós, pois a raiz é apenas estrutural.
+     */
     public int obterTotalTarefas() {
-        return arvore.contarNos();
+        int totalNos = arvore.contarNos();
+        return Math.max(0, totalNos - 1);
     }
 }

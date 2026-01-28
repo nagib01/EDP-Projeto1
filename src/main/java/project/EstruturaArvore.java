@@ -1,5 +1,7 @@
 package project;
 
+import java.util.Iterator;
+
 /**
  * Classe responsável exclusivamente pela manipulação da estrutura de dados (Árvore).
  * Aqui residem os algoritmos de recursividade, busca e travessia.
@@ -14,8 +16,6 @@ public class EstruturaArvore {
     public Tarefa getRaiz() {
         return raiz;
     }
-
-    // --- Operações de Busca (Recursividade) ---
 
     public Tarefa buscar(int id) {
         if (raiz.getId() == id) {
@@ -37,8 +37,6 @@ public class EstruturaArvore {
         return null;
     }
 
-    // --- Operações de Listagem (Recursividade) ---
-
     public void exibirArvore() {
         exibirRecursivo(raiz, 0);
     }
@@ -54,29 +52,34 @@ public class EstruturaArvore {
         }
     }
 
-    // --- Operações de Remoção (Recursividade) ---
-
     public boolean remover(int id) {
         if (raiz.getId() == id) {
-            return false; // Não removemos a raiz estrutural
+            return false;
         }
         return removerRecursivo(raiz, id);
     }
 
+    /**
+     * Implementa a remoção segura utilizando Iterator (Regra 5.2).
+     * Evita ConcurrentModificationException e para a recursão assim que encontra o alvo.
+     */
     private boolean removerRecursivo(Tarefa pai, int id) {
-        for (Tarefa subtarefa : pai.getSubtarefas()) {
+        Iterator<Tarefa> iterator = pai.getSubtarefas().iterator();
+        
+        while (iterator.hasNext()) {
+            Tarefa subtarefa = iterator.next();
+            
             if (subtarefa.getId() == id) {
-                pai.removerSubtarefa(id);
+                iterator.remove();
                 return true;
             }
+            
             if (removerRecursivo(subtarefa, id)) {
                 return true;
             }
         }
         return false;
     }
-
-    // --- Operações de Contagem (Recursividade) ---
 
     public int contarNos() {
         return contarRecursivo(raiz);
